@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>상세보기</h1>
+<h2 th:text="${board.title}"></h2>
+<ul>
+<li th:each="file:${filelist}">
+<span th:text="${file.fileName}"></span>
+</li>
+</ul>
+
+<form action="/board-form">
+<button>게시글작성</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,65 @@
+1 terms_emp(채용조건)
+*지원자들이 해당 조건 이상의 능력을 갖추어야 함
+*상반기 하반기 나뉨
+person_number 지원자번호		last_school 학력
+person_name 지원자 이름		credit 학점
+	
+지원자 나이		
+person_residence 지원자 거주지	career 경력
+				
+				license 자격증
+				
+				salary 연봉
+				pdf 파일
+
+
+2 resume_mgmt(이력서관리)
+*채용조건을 충족하는 사람들은 true false 나뉨
+//p_code		지원자코드
+--pdf 파일
+person_name	이름
+person_age	나이
+person_gender	성별
+person_address	주소
+person_tel	전화번호 
+person_email	이메일
+
+
+3 personality_interview(인성/면접결과)
+*이력서 관리에서 true값을 반환 된 지원자는 인성 점수와 면접 점수를 결정됨
+//p_code 지원자 코드	
+p_challenge 도전		i_attitude 태도
+p_creativity 창의		i_initiative	 주도성
+p_passion	열정		i_reliability 신뢰성
+p_cooperation 협력		i_creativity 창의성
+p_globalmind 글로벌마인드
+
+//인성/면접결과에 대한 이력서관리에 들어있는 지원자코드와 인성/면접결과 지원자의 코드를 조인을 해서 
+//시퀀스로 등록을 하고 프로시저/펑션 중에서 펑션기능(인성 평균, 면접 평균, p_code)을 이용하여 반환하고 버려짐
+
+4 success_applicant(합격자조회) -- 시퀀스 펑션
+인성/면접, 이력서관리
+인성,면접 평균		p_avg 인성 평균
+			i_avg 면접 평균
+p_code 지원자 코드(fk)
+--status 합격여부
+
+
+*교육예정자
+*인성 평균, 면접 평균 지원자 코드 이용해서 교육예정을 지정받음
+
+5 progress_education(교육진행상황)
+*교육예정자 지원자의 코드를 받아서 교육이 몇월 몇일부터 몇월 몇일까지 진행을 알려줌
+*지원자의 코드를 이용해서 이력서 관리랑 조인해야함
+p_code 지원자 코드
+specialized_training 전문분야 훈련
+mgmt_training	경영자 교육
+job_training	직무교육
+
+6 job_evaluation(직무평가)
+*교육진행상황이 끝난 지원자의 코드는 각 부서의 팀장급이 평가
+//p_code 지원자코드 
+communication 의사소통
+department_suitability 부서적합성
+resposibility 책임감
+business_understanding 업무이해도

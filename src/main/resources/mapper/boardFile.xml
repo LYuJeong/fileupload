@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.BoardMapper">
+	<insert id="insertBoardFile"
+		parameterType="com.example.demo.dto.BoardFileDTO">
+		insert into t_file values(
+		idx.NEXTVAL,
+		#{boardIdx},
+		#{fileName},
+		#{filePath},
+		#{fileSize}
+		)
+	</insert>
+
+	<select id="selectBoardFileList"
+		resultType="com.example.demo.dto.BoardFileDTO">
+		SELECT * FROM t_file WHERE boardIdx=#{boardIdx}
+	</select>
+
+	<select id="selectBoardFile"
+		resultType="com.example.demo.dto.BoardFileDTO">
+		SELECT * FROM t_file WHERE idx=#{idx}
+	</select>
+</mapper>

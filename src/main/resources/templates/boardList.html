@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>게시글목록</h1>
+<ul>
+<li th:each="dto:${list}">
+<span th:text="${dto.boardIdx}"></span>
+&nbsp;&nbsp;&nbsp;
+<a th:href="@{/board-detail(boardIdx = ${dto.boardIdx})}">
+<span th:text="${dto.title}"></span>
+</a>
+</li>
+</ul>
+
+<form action="/board-form">
+<button>게시글작성</button>
+</form>
+</body>
+</html>

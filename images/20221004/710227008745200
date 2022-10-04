@@ -1,0 +1,80 @@
+--1.재고수량이 1500 이상인 제품명(NAME)과 재고수량(AMOUNT_IN_STOCK)을 출력해주세요
+
+SELECT I.AMOUNT_IN_STOCK , P.NAME 
+FROM S_INVENTORY I , S_PRODUCT P
+WHERE I.PRODUCT_ID=P.ID
+AND I.AMOUNT_IN_STOCK > 1500
+
+--2.신용등급(CREDIT_RATING)이 EXCELLENT, GOOD인 고객의 주문날짜(DATE_ORDERED)와 주문총액(TOTAL)을 구하세요.
+그리고 주문이력이 없는 고객도 나오게 하면서 고객명(NAME)을 오름차순으로 정렬해주세요.
+
+SELECT	O.DATE_ORDERED , O.TOTAL , C.NAME
+FROM S_CUSTOMER C , S_ORD O
+WHERE C.CREDIT_RATING IN('EXCELLENT' , 'GOOD')
+AND C.ID = O.CUSTOMER_ID(+)
+ORDER BY C.NAME ASC
+
+--3.CHICAGO 지역에 근무하는 사원들 중 BLAKE가 직속상관인 사원들의 사원번호(EMPNO), 이름(ENAME), 직무(JOB),부서위치(LOC),상사ID(MGR)를 가져온다. 단 중첩 서브쿼리로 풀이할것 중첩 서브쿼리는
+
+WHERE 절에서 사용하는 서브쿼리이다
+1)
+SELECT E.EMPNO , E.JOB , D.LOC , E.MGR
+FROM EMP E , DEPT D
+WHERE D.LOC='CHICAGO'
+AND E.MGR = ALL (SELECT EMPNO
+			FROM EMP
+              		 WHERE ENAME='BLAKE')
+--------------------------------------------------------------------------------------------------------------------------------------------------
+2)
+SELECT E.EMPNO , E.JOB , D.LOC , E.MGR
+FROM EMP E , DEPT D
+WHERE D.LOC='CHICAGO'
+AND E.MGR = ALL (SELECT EMPNO
+			FROM EMP
+              		 WHERE ENAME='BLAKE')
+
+--4.KING이 직장상사인 사람의 사원번호(EMPNO)와 이름(ENAME), 부서명(DNAME),부서번호(DEPTNO) ,상사ID(MGR)를 출력하세요. (단 인라인뷰 
+사용하세요.
+인라인뷰는 FROM절에서 서브쿼리를 사용하는 서브쿼리이다.)
+
+인라인뷰 X
+>>
+SELECT E.ENAME , D.DNAME , D.DEPTNO , E.MGR
+FROM EMP E, DEPT D
+WHERE E.DEPTNO = D.DEPTNO
+AND E.MGR = ANY(SELECT EMPNO
+			FROM EMP
+                        WHERE ENAME='KING')
+-----------------------------------------------------------------------------
+
+SELECT A.M1 , A.M2 , B.D2 , A.M3 , A.M4
+FROM 
+	(	
+          	SELECT E2.EMPNO M1 , E2.ENAME M2  , E2.DEPTNO M3 , E2.MGR M4
+            FROM EMP E1 ,EMP E2
+            WHERE E1.EMPNO = E2.MGR
+            AND E1.ENAME='KING'
+	)A, 
+            (
+            SELECT DEPTNO D1 , DNAME D2
+            FROM DEPT
+            )B
+  WHERE A.M3 = B.D1
+
+
+--5.평균급여가 가장 높은 부서의 번호를 출력 그리고 
+가장높은 평균급여 소수점 자리들은 다 버림해주세요.(예시 3030.3333 버린 후 3030)
+(인라인뷰로 풀어주세요~)
+
+SELECT A.MSAL , B.D2
+FROM (	
+	SELECT TRUNC(MAX(AVG(SAL))) MSAL
+            FROM EMP
+            GROUP BY DEPTNO
+	) A,
+	(
+          SELECT TRUNC(AVG(SAL)) M2SAL ,DEPTNO D2
+           FROM EMP
+           GROUP BY DEPTNO   
+            ) B
+WHERE A.MSAL = B.M2SAL        

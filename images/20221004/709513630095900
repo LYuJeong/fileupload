@@ -1,0 +1,53 @@
+1) Eclipse를 실행하여 새로은 워크스페이스를 생성하고, 프로젝트를 import 합니다.
+- 프로젝트 zip 파일에 server.xml도 같이 있으니 생성되어있는 server.xml을 지우고 import 하시는게 좋습니다.
+
+2) encoding 설정을 UTF-8로 전부 변경해두지 않았을 경우, import 하기 전에 UTF-8로 변경합니다.
+
+ 
+3) DB 인사 계정 추가
+
+# cmd 실행 후 아래의 내용을 순서대로 복사 & 붙여넣기 해서 입력합니다. #
+- sqlplus /nolog
+
+- conn / as sysdba 
+
+- create user insa identified by insa;
+
+- grant resource,dba,connect to insa;
+
+- exit
+
+# 계정 생성시 문제가 생겼을 때 계정 삭제하는법 #  (생략가능)
+- sqlplus /nolog
+
+- conn sys / as sysdba 
+
+- drop user insa cascade;
+
+
+4) DUMP 파일 추가
+# 해당 경로에 덤프파일을 먼저 옮긴 후 명령어를 실행합니다. #
+- imp userid=insa/insa file='c:/insa71.dmp' full=y
+
+
+# 나의 DUMP 파일을 내보내는법 #  (생략가능)
+- cmd창을 관리자 모드로 실행한 후 명령어를 실행합니다.
+- exp userid=insa/insa file='c:/insa72.dmp' 
+
+
+
+5) 톰캣 설정
+- server.xml에서 
+<GlobalNamingResources> 과 </GlobalNamingResources> 사이에 아래의 내용을 추가합니다.
+<Resource auth="Container" driverClassName="oracle.jdbc.OracleDriver" maxIdle="10" maxTotal="20" maxWaitMillis="-1" name="jdbc/insa" password="insa" type="javax.sql.DataSource" url="jdbc:oracle:thin:@127.0.0.1:1521:xe" username="insa"/>
+
+- context.xml에서
+</context> 바로 위에 아래의 내용을 추가합니다.
+<ResourceLink global="jdbc/insa" name="jdbc/insa" type="javax.sql.DataSource"/>
+
+
+6) 기타 인수인계 사항
+# 조원끼리 모든 환경을 동일하게 셋팅하세요. #
+- 톰캣버전, JDK버전, 설치경로 등 
+- 오류가 뜨더라도 같은 환경에서 오류가 떠야 해결하기 쉽습니다.
+- 조원에게 프로젝트를 받거나 할 때 오류가 뜨지 않습니다. 
